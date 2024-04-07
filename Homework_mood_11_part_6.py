@@ -1,92 +1,85 @@
-# Завдання 1
-# Створіть базовий клас «Фігура» з методом для підрахунку
-# площі. Створіть похідні класи: прямокутник, коло, прямокутний трикутник, трапеція, зі своїми методами для підрахунку
-# площі.
-# Завдання 2
-# Для класів із першого завдання перевизначте магічні
-# методи int (повертає площу) та str (повертає інформацію
-# про фігуру).
-
-import math
-
+# Завдання 3
+# Створіть базовий клас Shape для рисування плоских фігур.
+# Визначте методи:
+# ■ Show() — виведення на екран інформації про фігуру;
+# ■ Save() — збереження фігури у файл;
+# ■ Load() — зчитування фігури з файлу.
+# Визначте похідні класи:
+# ■ Square — квадрат із заданими з координатами лівого
+# верхнього кута та довжиною сторони.
+# ■ Rectangle — прямокутник із заданими координатами
+# верхнього лівого кута та розмірами.
+# Домашнє завдання
+# 1
+# ■ Circle — коло із заданими координатами центру та радіусом.
+# ■ Ellipse — еліпс із заданими координатами верхнього кута
+# описаного навколо нього прямокутника зі сторонами,
+# паралельними осям координат, та розмірами цього прямокутника.
+# Створіть список фігур, збережіть фігури у файл, завантажте в інший список та відобразіть інформацію про кожну
+# фігуру.
 class Shape:
-    def area(self):
-        pass
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
 
-    def __int__(self):
-        return self.area()
+    def show(self):
+        print("Coordinates:", self.x, self.y)
 
-    def __str__(self):
-        return "This is a generic shape."
+    def save(self, filename):
+        with open(filename, 'w') as f:
+            f.write(f"Coordinates: {self.x}, {self.y}")
+
+    @classmethod
+    def load(cls, filename):
+        with open(filename, 'r') as f:
+            data = f.read().split(': ')[1].split(', ')
+            x, y = map(int, data)
+            return cls(x, y)
+
+class Square(Shape):
+    def __init__(self, x, y, side):
+        super().__init__(x, y)
+        self.side = side
+
+    def show(self):
+        super().show()
+        print("Side:", self.side)
+
+    def save(self, filename):
+        super().save(filename)
+        with open(filename, 'a') as f:
+            f.write(f"\nSide: {self.side}")
 
 class Rectangle(Shape):
-    def __init__(self, width, height):
+    def __init__(self, x, y, width, height):
+        super().__init__(x, y)
         self.width = width
         self.height = height
 
-    def area(self):
-        return self.width * self.height
+    def show(self):
+        super().show()
+        print("Width:", self.width)
+        print("Height:", self.height)
 
-    def __int__(self):
-        return self.area()
+    def save(self, filename):
+        super().save(filename)
+        with open(filename, 'a') as f:
+            f.write(f"\nWidth: {self.width}\nHeight: {self.height}")
 
-    def __str__(self):
-        return f"Rectangle: width = {self.width}, height = {self.height}"
+square = Square(0, 0, 5)
+square.show()
+square.save("square.txt")
 
-class Circle(Shape):
-    def __init__(self, radius):
-        self.radius = radius
+rectangle = Rectangle(1, 1, 4, 3)
+rectangle.show()
+rectangle.save("rectangle.txt")
 
-    def area(self):
-        return math.pi * self.radius ** 2
+loaded_square = Shape.load("square.txt")
+loaded_rectangle = Shape.load("rectangle.txt")
 
-    def __int__(self):
-        return self.area()
+print("\nLoaded square:")
+loaded_square.show()
 
-    def __str__(self):
-        return f"Circle: radius = {self.radius}"
+print("\nLoaded rectangle:")
+loaded_rectangle.show()
 
-class RightTriangle(Shape):
-    def __init__(self, base, height):
-        self.base = base
-        self.height = height
-
-    def area(self):
-        return 0.5 * self.base * self.height
-
-    def __int__(self):
-        return self.area()
-
-    def __str__(self):
-        return f"Right Triangle: base = {self.base}, height = {self.height}"
-
-class Trapezoid(Shape):
-    def __init__(self, base1, base2, height):
-        self.base1 = base1
-        self.base2 = base2
-        self.height = height
-
-    def area(self):
-        return 0.5 * (self.base1 + self.base2) * self.height
-
-    def __int__(self):
-        return self.area()
-
-    def __str__(self):
-        return f"Trapezoid: base1 = {self.base1}, base2 = {self.base2}, height = {self.height}"
-
-rectangle = Rectangle(5, 4)
-print(rectangle)
-print("Rectangle area:", int(rectangle))
-
-circle = Circle(3)
-print(circle)
-print("Circle area:", int(circle))
-
-triangle = RightTriangle(4, 3)
-print(triangle)
-print("Triangle area:", int(triangle))
-
-trapezoid = Trapezoid(3, 6, 4)
-print(trapezoid)
-print("Trapezoid area:", int(trapezoid))
