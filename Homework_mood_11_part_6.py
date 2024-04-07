@@ -75,7 +75,6 @@ class Trapezoid(Shape):
     def __str__(self):
         return f"Trapezoid: base1 = {self.base1}, base2 = {self.base2}, height = {self.height}"
 
-# Приклад використання
 rectangle = Rectangle(5, 4)
 print(rectangle)
 print("Rectangle area:", int(rectangle))
